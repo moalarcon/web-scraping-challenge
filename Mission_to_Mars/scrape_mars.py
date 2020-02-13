@@ -20,7 +20,7 @@ import time
 def init_browser():
     # @NOTE: Replace the path with your actual path to the chromedriver
     executable_path = {"executable_path":"/usr/local/bin/chromedriver"}
-    return Browser("chrome", **executable_path, headless=False)
+    return Browser("chrome", **executable_path, headless=True)
 
 
 # In[3]:
@@ -66,7 +66,7 @@ def scrape_news():
             latest_news['news_date'] = date
             latest_news['news_about'] = description
             latest_news["news_link"] = f'{nasa_url}{link}'
-        print("---------------PROCESSING NEWS------------------")
+        print("------------PROCESSING NEWS------------")
         return latest_news
     
 ## close browser    
@@ -91,7 +91,7 @@ def scrape_feat_img():
         html = browser.html
         soup = bs(html, "html.parser")
         img_result = soup.find('div', class_='carousel_container')
-        print("------------PROCESSING FEATURED IMG---------------")
+        print("------------PROCESSING FEATURED IMG------------")
         
         ## Identify and store featured image link
         image_path = img_result.find('a', class_='button fancybox').get("data-fancybox-href")
@@ -121,7 +121,7 @@ def scrape_weather():
         html = browser.html
         soup = bs(html, "html.parser")
         ##define tag to parse
-        print("------------PROCESSING WEATHER---------------")
+        print("------------PROCESSING WEATHER------------")
         tweet_weather = soup.find('p', class_="TweetTextSize TweetTextSize--normal js-tweet-text tweet-text")
 
         
@@ -143,7 +143,7 @@ def scrape_facts():
     mars_facts = {}
     facts_url= "https://space-facts.com/mars/"
     tables = pd.read_html(facts_url)
-    print("------------PROCESSING FACTS---------------")
+    print("------------PROCESSING FACTS------------")
     
     ## create DF of mars facts table and convert to HTML
     marsinfo_df = tables[0]
@@ -165,6 +165,7 @@ def scrape_hemispheres():
     try: 
         ##initiate browser; define URL and visit in browser
         browser = init_browser()
+        mars_hemispheres={}
         
         hemi_url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
         head_url = "https://astrogeology.usgs.gov"
@@ -174,7 +175,7 @@ def scrape_hemispheres():
         soup = bs(html, "html.parser")
         ## define tag and parse
         hemispheres = soup.find_all('div', class_="item")
-        print("------------PROCESSING HEMISPHERES-------------")
+        print("------------PROCESSING HEMISPHERES------------")
         
         titles=[]
         img_urls=[]
@@ -187,11 +188,14 @@ def scrape_hemispheres():
             url_to_full= browser.html
             soup = bs(url_to_full, "html.parser")
             full_img_url = head_url + soup.find("img", class_="wide-image")["src"]
-        ## append to list
-            titles.append(img_title)
-            img_urls.append(full_img_url)
-## add to dict
-        mars_hemispheres= dict(zip(titles, img_urls))
+        ## append to lists
+#            titles.append(img_title)
+#            img_urls.append(full_img_url)
+# ## add to dict OR LIST
+            mars_hemispheres["titles"]=img_title
+            mars_hemispheres["links"]=full_img_url
+        
+        #mars_hemispheres= list(titles = titles, links = img_urls)
 
         return mars_hemispheres
     
@@ -215,7 +219,7 @@ def scrape():
         facts = scrape_facts()
         hemis= scrape_hemispheres()
         date = dt.datetime.now()
-        print("------------PROCESSING FINAL INPUT----------")
+        print("------------PROCESSING FINAL INPUT------------")
         data = {
             "news_data": new_news,
             "featured_img_data": image,

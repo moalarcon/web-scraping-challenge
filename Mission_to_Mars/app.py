@@ -18,9 +18,9 @@ mongo = PyMongo(app)
 def home():
     ## write a statement that finds all the items in the db and sets it to a variable
     mars_info = mongo.db.mars_info.find()
-    
+    print(mars_info[0])
     ## render an index.html template and pass it the data you retrieved from the database 
-    return render_template("index.html", mars_info=mars_info)
+    return render_template("index.html", mars_info=mars_info[0])
 
 
 @app.route("/scrape")

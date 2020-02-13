@@ -25,19 +25,17 @@
         displayed in this HTML page.</p>
       <hr class="my-4">
       <p>The tools used were: Python, Jupyter Notebook, BeautifulSoup, Pandas, Splinter, Flask and MongoDB</p>
-      <a class="btn btn-primary btn-lg" href="/scrape" role="button">Scrape New Data!</a>
+      <a class="btn btn-primary btn-lg" href="localhost:5000/scrape" role="button">Scrape New Data!</a>
     </div>
 
     <!-- News Section -->
     <div class="container">
       <h3>Latest Mars News</h3>
-
       <h6 style="color: #c1440e">{{ mars_info.news_data.news_title }}</h6>
       <p>{{ mars_info.news_data.news_date }}</p>
       <p>{{ mars_info.news_data.news_about }}</p>
       <p>{{ mars_info.news_data.news_link }}</p>
     </div>
-
 
     <div class="container">
       <div class="row">
@@ -75,7 +73,7 @@
       <hr>
       <div class="col-md-12">
         <div class="row">
-          {% for item in mars_info.hemispheres_data %}
+          {% for item in mars_info.hemisphere_data %}
           <div class="col-md-6">
             <div class="card text-white bg-dark" style="margin: 30px;">
               <img class="card-img-top" src="{{ item.links }}" />
